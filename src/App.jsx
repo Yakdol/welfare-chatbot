@@ -28,17 +28,19 @@ const FONT = "'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui,
 // Setup screen — researcher picks condition + scenario
 // ─────────────────────────────────────────────────────────────
 function SetupScreen({ onStart, mobile }) {
-  const conditions = [1, 2, 3];
+  const conditions = [1, 2, 3, 4];
   const scenarios = [
     { id: 's1', label: '시나리오 1', sub: '기초연금' },
     { id: 's2', label: '시나리오 2', sub: '노인 일자리' },
     { id: 's3', label: '시나리오 3', sub: '전입신고' },
+    { id: 's4', label: '시나리오 4', sub: '건강보험' },
   ];
 
   const condDescs = {
     1: '정보만 제공',
-    2: '의도 반영 + 정보',
-    3: '공감 + 의도 반영 + 정보',
+    2: '정보 + 인지적 공감',
+    3: '정보 + 정서적 공감',
+    4: '정보 + 인지적 + 정서적 공감',
   };
 
   const topPad = mobile ? 'max(env(safe-area-inset-top, 44px), 44px)' : '58px';
@@ -76,7 +78,7 @@ function SetupScreen({ onStart, mobile }) {
               }}>조건 {c}</span>
               <span style={{ fontSize: 11, color: T.inkMuted }}>{condDescs[c]}</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
               {scenarios.map(s => (
                 <button
                   key={s.id}
@@ -99,10 +101,10 @@ function SetupScreen({ onStart, mobile }) {
                   onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                 >
-                  <div style={{ fontSize: 11, fontWeight: 600, color: T.primary, letterSpacing: 0.5 }}>
+                  <div style={{ fontSize: 10, fontWeight: 600, color: T.primary, letterSpacing: 0.3 }}>
                     {s.label}
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: T.ink, marginTop: 4 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, marginTop: 4 }}>
                     {s.sub}
                   </div>
                 </button>
@@ -242,7 +244,7 @@ function ChatScreen({ condition, scenario, onExit, mobile }) {
 
     setTimeout(() => {
       let parts;
-      if (turn < 3) {
+      if (turn < 2) {
         parts = buildResponse(condition, scenario, turn);
       } else {
         parts = [{ kind: 'fact', text: FALLBACK }];
@@ -262,14 +264,14 @@ function ChatScreen({ condition, scenario, onExit, mobile }) {
     inputRef.current?.focus();
   };
 
-  // Hint text for current turn (0,1,2). After turn 3, no hints.
+  // Hint text for current turn (0,1). After turn 2, no hints.
   const currentHints = useMemo(() => {
-    if (turn > 2) return [];
+    if (turn > 1) return [];
     return [meta.hints[turn]];
   }, [turn, meta]);
 
-  // Show all 3 hints initially (turn 0). After each turn, show only the next one.
-  const hintsToShow = turn === 0 ? meta.hints : (turn <= 2 ? [meta.hints[turn]] : []);
+  // Show all 2 hints initially (turn 0). After each turn, show only the next one.
+  const hintsToShow = turn === 0 ? meta.hints : (turn <= 1 ? [meta.hints[turn]] : []);
 
   return (
     <div style={{
