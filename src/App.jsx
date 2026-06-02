@@ -31,7 +31,7 @@ function SetupScreen({ onStart, mobile }) {
   const conditions = [1, 2, 3, 4];
   const scenarios = [
     { id: 's1', label: '시나리오 1', sub: '기초연금' },
-    { id: 's2', label: '시나리오 2', sub: '노인 일자리' },
+    { id: 's2', label: '시나리오 2', sub: '일자리' },
     { id: 's3', label: '시나리오 3', sub: '전입신고' },
     { id: 's4', label: '시나리오 4', sub: '건강보험' },
   ];
